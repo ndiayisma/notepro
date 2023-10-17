@@ -14,18 +14,39 @@ class ConfigProfType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $prof = $options['data'];
+        $professor =null;
+        $subjects = [];
+        if (isset($options['data'])){
+            $professor = $options['data'];
+            $subjects = $professor->getSubjects();
+        }
 
         $builder
             ->add('professor', EntityType::class, [
                 'class' => Professor::class,
                 'placeholder' => 'Sélectionner un professeur',
-                'data' => $prof,
+                'data' => $professor,
                 'choice_label' => 'name',
                 'multiple' => false,
                 'expanded' => false,
                 'label' => false,
                 'mapped' => false,
+            ])
+            ->add('subjects', EntityType::class, [
+                'class' => Subject::class,
+                'choice_label' => 'label',
+                'expanded' => true,
+                'multiple' => true,
+                'label' => 'Matières',
+                'choice_attr' => function ($subject, $key, $index) use ($subjects){
+                    $selected = false;
+                    foreach ($subjects as $s){
+                        if ($subject == $s){
+                            $selected = true;
+                        }
+                    }
+                    return ['checked' => $selected];
+                }
             ])
             ->add('submit', SubmitType::class, [
                 'label' => 'Ok',

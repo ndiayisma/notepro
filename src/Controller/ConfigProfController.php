@@ -21,23 +21,12 @@ class ConfigProfController extends AbstractController
         $formProfs->handleRequest($request);
 
         if ($formProfs->isSubmitted() && $formProfs->isValid()) {
-            $selectedProf = $formProfs->get('professor')->getData();
-            $this->redirectToRoute('app_config_prof', ['id' => $selectedProf->getId()]);
-        }
-
-        $formSubjects = $this->createForm(SelectSubjectType::class, $professor);
-        $formSubjects->handleRequest($request);
-        $formSubjectsView = $formSubjects->createView();
-
-        if ($formSubjects->isSubmitted() && $formSubjects->isValid()) {
-            //dd($professor);
             $entityManager->persist($professor);
             $entityManager->flush();
         }
 
         return $this->render('config_prof/index.html.twig', [
             'formProfs' => $formProfs->createView(),
-            'formSubjects' => $formSubjectsView,
         ]);
     }
 
@@ -45,21 +34,17 @@ class ConfigProfController extends AbstractController
     public function configProfSubject(Request $request, EntityManagerInterface $entityManager, ?Professor $professor): Response
     {
         $formProfs = $this->createForm(ConfigProfType::class, $professor);
+        $formProfs->remove('subjects');
+
         $formProfs->handleRequest($request);
 
         if ($formProfs->isSubmitted() && $formProfs->isValid()) {
             $selectedProf = $formProfs->get('professor')->getData();
-            $this->redirectToRoute('app_config_prof', ['id' => $selectedProf->getId()]);
+            return $this->redirectToRoute('app_config_prof', ['id' => $selectedProf->getId()]);
         }
-        $formSubjectsView = null;
-        if ($professor !== null){
-            $formSubjects = $this->createForm(SelectSubjectType::class, $professor);
-            $formSubjects->handleRequest($request);
-            $formSubjectsView = $formSubjects->createView();
-        }
+
         return $this->render('config_prof/index.html.twig', [
             'formProfs' => $formProfs->createView(),
-            'formSubjects' => $formSubjectsView,
         ]);
     }
 }
