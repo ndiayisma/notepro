@@ -14,13 +14,14 @@ class ConfigProfType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        $prof = $options['data'];
 
         $builder
             ->add('professor', EntityType::class, [
                 'class' => Professor::class,
                 'placeholder' => 'Sélectionner un professeur',
+                'data' => $prof,
                 'choice_label' => 'name',
-                'data' => $options['data'],
                 'multiple' => false,
                 'expanded' => false,
                 'label' => false,

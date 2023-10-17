@@ -15,7 +15,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class ConfigProfController extends AbstractController
 {
     #[Route('/configprof/{id}', name: 'app_config_prof')]
-    public function index(Request $request, EntityManagerInterface $entityManager, ?Professor $professor): Response
+    public function index(Request $request, EntityManagerInterface $entityManager, Professor $professor): Response
     {
         $formProfs = $this->createForm(ConfigProfType::class, $professor);
         $formProfs->handleRequest($request);
@@ -24,17 +24,17 @@ class ConfigProfController extends AbstractController
             $selectedProf = $formProfs->get('professor')->getData();
             $this->redirectToRoute('app_config_prof', ['id' => $selectedProf->getId()]);
         }
-        $formSubjectsView = null;
-        if ($professor !== null){
-            $formSubjects = $this->createForm(SelectSubjectType::class, $professor);
-            $formSubjects->handleRequest($request);
-            $formSubjectsView = $formSubjects->createView();
 
-            if ($formProfs->isSubmitted() && $formProfs->isValid()) {
-                $entityManager->persist($professor);
-                $entityManager->flush();
-            }
+        $formSubjects = $this->createForm(SelectSubjectType::class, $professor);
+        $formSubjects->handleRequest($request);
+        $formSubjectsView = $formSubjects->createView();
+
+        if ($formSubjects->isSubmitted() && $formSubjects->isValid()) {
+            //dd($professor);
+            $entityManager->persist($professor);
+            $entityManager->flush();
         }
+
         return $this->render('config_prof/index.html.twig', [
             'formProfs' => $formProfs->createView(),
             'formSubjects' => $formSubjectsView,

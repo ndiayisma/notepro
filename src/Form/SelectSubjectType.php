@@ -18,6 +18,7 @@ class SelectSubjectType extends AbstractType
         $subjects = $professor->getSubjects();
 
         $builder
+            ->add('name')
             ->add('subjects', EntityType::class, [
                 'class' => Subject::class,
                 'choice_label' => 'label',
