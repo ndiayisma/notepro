@@ -33,7 +33,7 @@ class Evaluation
     #[ORM\JoinColumn(nullable: false)]
     private ?Subject $subject = null;
 
-    #[ORM\ManyToOne(inversedBy: 'evaluations')]
+    #[ORM\ManyToOne(fetch: 'EAGER', inversedBy: 'evaluations')]
     #[ORM\JoinColumn(nullable: false)]
     private ?ClassLevel $classLevel = null;
 
@@ -150,5 +150,15 @@ class Evaluation
         }
 
         return $this;
+    }
+
+    public function getGradeByStudent(Student $student): ?Grade
+    {
+        foreach ($this->getGrades() as $grade){
+            if($grade->getStudent() === $student){
+                return $grade;
+            }
+        }
+        return null;
     }
 }

@@ -2,7 +2,9 @@
 
 namespace App\Form;
 
+use App\Entity\ClassLevel;
 use App\Entity\Student;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
@@ -23,6 +25,11 @@ class StudentType extends AbstractType
             ])
             ->add('name', TextType::class, [
                 'label' => 'Nom complet',
+            ])
+            ->add('classLevel', EntityType::class, [
+                'label' => 'Classe',
+                'class' => ClassLevel::class,
+                'choice_label' => 'label',
             ])
         ;
     }

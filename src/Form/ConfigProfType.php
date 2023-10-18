@@ -2,6 +2,7 @@
 
 namespace App\Form;
 
+use App\Entity\ClassLevel;
 use App\Entity\Professor;
 use App\Entity\Subject;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -16,9 +17,11 @@ class ConfigProfType extends AbstractType
     {
         $professor =null;
         $subjects = [];
+        $classes = [];
         if (isset($options['data'])){
             $professor = $options['data'];
             $subjects = $professor->getSubjects();
+            $classes = $professor->getClassLevels();
         }
 
         $builder
@@ -41,6 +44,22 @@ class ConfigProfType extends AbstractType
                 'choice_attr' => function ($subject, $key, $index) use ($subjects){
                     $selected = false;
                     foreach ($subjects as $s){
+                        if ($subject == $s){
+                            $selected = true;
+                        }
+                    }
+                    return ['checked' => $selected];
+                }
+            ])
+            ->add('classLevels', EntityType::class, [
+                'class' => ClassLevel::class,
+                'choice_label' => 'label',
+                'expanded' => true,
+                'multiple' => true,
+                'label' => 'Classes',
+                'choice_attr' => function ($subject, $key, $index) use ($classes){
+                    $selected = false;
+                    foreach ($classes as $s){
                         if ($subject == $s){
                             $selected = true;
                         }

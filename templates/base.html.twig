@@ -24,18 +24,21 @@
                     <ul class="navbar-nav">
                         {% if is_granted('ROLE_STUDENT') %}
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="#">Mes notes</a>
+                            <a class="nav-link active" aria-current="page" href="{{ path('app_student_notes', {id: app.user.id}) }}">Mes notes</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link active" aria-current="page" href="#">Mes profs</a>
                         </li>
-                        {% endif %}
-                        {% if is_granted('ROLE_PROFESSOR') %}
+                        {% elseif is_granted('ROLE_PROFESSOR') %}
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="#">Mes classes</a>
+                            <a class="nav-link active" aria-current="page" href="{{ path('app_professor_classes', {id: app.user.id}) }}">Mes classes</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="#">Mes évaluations</a>
+                            <a class="nav-link active" aria-current="page" href="{{ path('app_professor_evaluations', {id: app.user.id}) }}">Mes évaluations</a>
+                        </li>
+                        {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="{{ path('app_login') }}">Se connecter</a>
                         </li>
                         {% endif %}
                         {% if is_granted('IS_AUTHENTICATED_FULLY') %}

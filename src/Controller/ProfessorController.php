@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Entity\ClassLevel;
+use App\Entity\Evaluation;
 use App\Entity\PreviousPasswords;
 use App\Entity\Professor;
 use App\Form\ProfessorType;
@@ -100,5 +102,25 @@ class ProfessorController extends AbstractController
         }
 
         return $this->redirectToRoute('app_professor_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/{id}/evaluations', name: 'app_professor_evaluations', methods: ['GET'])]
+    public function evaluations(Professor $professor, EntityManagerInterface $entityManager): Response
+    {
+        $evals = $entityManager->getRepository(Evaluation::class)->findBy(['professor' => $professor]);
+        return $this->render('professor/myevals.html.twig', [
+            'professor' => $professor,
+            'evals' => $evals,
+        ]);
+    }
+
+    #[Route('/{id}/classes', name: 'app_professor_classes', methods: ['GET'])]
+    public function classes(Professor $professor, EntityManagerInterface $entityManager): Response
+    {
+        $classes = $entityManager->getRepository(ClassLevel::class)->findByProfessor($professor);
+        return $this->render('professor/myclasses.html.twig', [
+            'professor' => $professor,
+            'classes' => $classes->getQuery()->getResult(),
+        ]);
     }
 }

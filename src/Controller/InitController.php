@@ -3,7 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\ClassLevel;
+use App\Entity\Evaluation;
+use App\Entity\Grade;
 use App\Entity\Professor;
+use App\Entity\Student;
 use App\Entity\Subject;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
@@ -50,6 +53,65 @@ class InitController extends AbstractController
         $prof->addSubject($subject4);
         $prof->addClassLevel($class1);
         $prof->addClassLevel($class2);
+        $prof2 = new Professor();
+        $prof2->setName('David Tissot');
+        $prof2->setEmail('david.tissot@lycee-faure.fr');
+        $prof2->setRoles(['ROLE_PROFESSOR']);
+        $prof2->setPassword($hasher->hashPassword($prof, 'prof'));
+        $prof2->addSubject($subject1);
+        $prof2->addSubject($subject2);
+        $prof2->addSubject($subject3);
+        $prof2->addSubject($subject4);
+        $prof2->addClassLevel($class1);
+        $prof2->addClassLevel($class2);
+
+        //Etudiants
+        $etudiant = new Student();
+        $etudiant->setName('John Lenon');
+        $etudiant->setEmail('john.lenon@lycee-faure.fr');
+        $etudiant->setClassLevel($class1);
+        $etudiant->setRoles(['ROLE_STUDENT']);
+        $etudiant->setPassword($hasher->hashPassword($prof, 'etudiant'));
+        $etudiant2 = new Student();
+        $etudiant2->setName('Paul Mc Cartney');
+        $etudiant2->setEmail('paul.mccartney@lycee-faure.fr');
+        $etudiant2->setClassLevel($class1);
+        $etudiant2->setRoles(['ROLE_STUDENT']);
+        $etudiant2->setPassword($hasher->hashPassword($prof, 'etudiant'));
+
+        $eval = new Evaluation();
+        $eval->setProfessor($prof);
+        $eval->setClassLevel($class1);
+        $eval->setDate(new \DateTime('now'));
+        $eval->setSubject($subject1);
+        $eval->setBareme(20);
+        $eval->setLabel('Eval sur Symfony');
+
+        $eval2 = new Evaluation();
+        $eval2->setProfessor($prof2);
+        $eval2->setClassLevel($class1);
+        $eval2->setDate(new \DateTime('now'));
+        $eval2->setSubject($subject1);
+        $eval2->setBareme(20);
+        $eval2->setLabel('Eval sur Java');
+
+        $noteEtudiant1 = new Grade();
+        $noteEtudiant1->setEvaluation($eval);
+        $noteEtudiant1->setGrade(17);
+        $noteEtudiant1->setStudent($etudiant);
+        $noteEtudiant2 = new Grade();
+        $noteEtudiant2->setEvaluation($eval);
+        $noteEtudiant2->setGrade(13);
+        $noteEtudiant2->setStudent($etudiant2);
+
+        $noteEtudiant3 = new Grade();
+        $noteEtudiant3->setEvaluation($eval2);
+        $noteEtudiant3->setGrade(8);
+        $noteEtudiant3->setStudent($etudiant);
+        $noteEtudiant4 = new Grade();
+        $noteEtudiant4->setEvaluation($eval2);
+        $noteEtudiant4->setGrade(5);
+        $noteEtudiant4->setStudent($etudiant2);
 
         //persistence des données
         $entityManager->persist($admin);
@@ -60,6 +122,16 @@ class InitController extends AbstractController
         $entityManager->persist($subject3);
         $entityManager->persist($subject4);
         $entityManager->persist($prof);
+        $entityManager->persist($prof2);
+        $entityManager->persist($etudiant);
+        $entityManager->persist($etudiant2);
+        $entityManager->persist($eval);
+        $entityManager->persist($eval2);
+        $entityManager->persist($noteEtudiant1);
+        $entityManager->persist($noteEtudiant2);
+        $entityManager->persist($noteEtudiant3);
+        $entityManager->persist($noteEtudiant4);
+
         $entityManager->flush();
 
         return $this->render('init/index.html.twig', [

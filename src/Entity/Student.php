@@ -64,4 +64,14 @@ class Student extends User
 
         return $this;
     }
+
+    public function getGradeByEval (Evaluation $evaluation): ?Grade
+    {
+        foreach ($this->getGrades() as $grade){
+            if ($grade->getEvaluation() === $evaluation){
+                return $grade;
+            }
+        }
+        return null;
+    }
 }

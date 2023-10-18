@@ -24,7 +24,7 @@ class ClassLevel
     #[ORM\OneToMany(mappedBy: 'classLevel', targetEntity: Evaluation::class, orphanRemoval: true)]
     private Collection $evaluations;
 
-    #[ORM\OneToMany(mappedBy: 'classLevel', targetEntity: Student::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'classLevel', targetEntity: Student::class, fetch: 'EAGER', orphanRemoval: true)]
     private Collection $students;
 
     public function __construct()

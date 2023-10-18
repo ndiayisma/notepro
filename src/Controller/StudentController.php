@@ -101,4 +101,15 @@ class StudentController extends AbstractController
 
         return $this->redirectToRoute('app_student_index', [], Response::HTTP_SEE_OTHER);
     }
+
+    #[Route('/{id}/notes', name: 'app_student_notes', methods: ['GET', 'POST'])]
+    public function notes(Student $student, EntityManagerInterface $entityManager): Response
+    {
+
+        return $this->render('student/mygrades.html.twig', [
+            'student' => $student,
+            'grades' => $student->getGrades()
+
+        ]);
+    }
 }

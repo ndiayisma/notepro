@@ -3,7 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\Evaluation;
+use App\Entity\Grade;
+use App\Entity\Student;
 use App\Form\EvaluationType;
+use App\Form\SetGradeType;
 use App\Repository\EvaluationRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -83,5 +86,43 @@ class EvaluationController extends AbstractController
         }
 
         return $this->redirectToRoute('app_evaluation_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/{id}/notes', name: 'app_evaluation_set_grades', methods: ['GET', 'POST'])]
+    public function notes(Request $request, Evaluation $evaluation, EntityManagerInterface $entityManager): Response
+    {
+        $form = $this->createForm(SetGradeType::class,null,['students' => $evaluation->getClassLevel()->getStudents(), 'evaluation' => $evaluation]);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            foreach ($form->getData() as $key => $value){
+                $gradeOrPresence = explode('_', $key);
+                if ($gradeOrPresence[0] == 'grade'){
+                    $student = $entityManager->getRepository(Student::class)->find($gradeOrPresence[1]);
+                    $grade = $entityManager->getRepository(Grade::class)->findOneBy(['student' => $student, 'evaluation' => $evaluation]);
+                    if($grade == null){
+                        $grade = new Grade();
+                        $grade->setEvaluation($evaluation);
+                        $grade->setStudent($student);
+                        $evaluation->addGrade($grade);
+                    }
+                    $grade->setGrade($value);
+                } else {
+                    $student = $entityManager->getRepository(Student::class)->find($gradeOrPresence[1]);
+                    $grade = $evaluation->getGradeByStudent($student);
+                    $grade->setPresent(!$value);
+
+                    $entityManager->persist($grade);
+                }
+            }
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_evaluation_index', [], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->render('evaluation/setgrade.html.twig', [
+            'evaluation' => $evaluation,
+            'form' => $form,
+        ]);
     }
 }

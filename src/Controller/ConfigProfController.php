@@ -35,6 +35,7 @@ class ConfigProfController extends AbstractController
     {
         $formProfs = $this->createForm(ConfigProfType::class, $professor);
         $formProfs->remove('subjects');
+        $formProfs->remove('classes');
 
         $formProfs->handleRequest($request);
 
