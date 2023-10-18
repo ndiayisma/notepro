@@ -13,10 +13,10 @@ class Professor extends User
     #[ORM\ManyToMany(targetEntity: ClassLevel::class, inversedBy: 'professors')]
     private Collection $classLevels;
 
-    #[ORM\OneToMany(mappedBy: 'professor', targetEntity: Evaluation::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'professor', targetEntity: Evaluation::class, fetch: 'EAGER', orphanRemoval: true)]
     private Collection $evaluations;
 
-    #[ORM\ManyToMany(targetEntity: Subject::class, inversedBy: 'professors', cascade: ['persist', 'remove'])]
+    #[ORM\ManyToMany(targetEntity: Subject::class, inversedBy: 'professors', fetch: 'EAGER', cascade: ['persist', 'remove'])]
     private Collection $subjects;
 
     public function __construct()

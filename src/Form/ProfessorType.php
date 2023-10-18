@@ -28,10 +28,6 @@ class ProfessorType extends AbstractType
             ->add('name', TextType::class, [
                 'label' => 'Nom complet',
             ])
-            ->add('subjects', EntityType::class, [
-                'class' => Subject::class,
-                'choice_label' => 'label',
-            ])
         ;
     }
 

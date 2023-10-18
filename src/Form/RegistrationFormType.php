@@ -42,7 +42,7 @@ class RegistrationFormType extends AbstractType
                     ]),
                     new PasswordStrength([
                         'message' => 'Votre mot de passe n\'est pas assez complexe',
-                        'minScore' => PasswordStrength::STRENGTH_MEDIUM,
+                        'minScore' => PasswordStrength::STRENGTH_WEAK,
                     ]),
                 ],
             ])

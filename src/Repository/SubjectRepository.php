@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Professor;
 use App\Entity\Subject;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -21,6 +22,13 @@ class SubjectRepository extends ServiceEntityRepository
         parent::__construct($registry, Subject::class);
     }
 
+    public function findByProfessor(Professor $professor)
+    {
+        return $this->createQueryBuilder('s')
+            ->innerJoin('s.professors', 'p')
+            ->andWhere('p.id = :professor')
+            ->setParameter('professor', $professor);
+    }
 //    /**
 //     * @return Subject[] Returns an array of Subject objects
 //     */

@@ -16,25 +16,36 @@
     <body>
         <nav class="navbar navbar-expand-lg bg-body-tertiary">
             <div class="container-fluid">
-                <a class="navbar-brand" href="#">NotePro</a>
+                <a class="navbar-brand" href="{{ path('app_home') }}">NotePro</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNavDropdown">
                     <ul class="navbar-nav">
+                        {% if is_granted('ROLE_STUDENT') %}
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="#">About us</a>
+                            <a class="nav-link active" aria-current="page" href="#">Mes notes</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="#">Mes profs</a>
+                        </li>
+                        {% endif %}
+                        {% if is_granted('ROLE_PROFESSOR') %}
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="#">Mes classes</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="#">Mes évaluations</a>
+                        </li>
+                        {% endif %}
                         {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-
                                 {{ app.user.email }}
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#">Mes notes</a></li>
-                                <li><a class="dropdown-item" href="#">Mes profs</a></li>
-                                <li><a class="dropdown-item" href="{{ path('app_logout') }}">Logout</a></li>
+                                <li><a class="dropdown-item" href="{{ path('user_change_password') }}">Changer mon mot de passe</a></li>
+                                <li><a class="dropdown-item" href="{{ path('app_logout') }}">Déconnexion</a></li>
                             </ul>
                         </li>
                         {% endif %}

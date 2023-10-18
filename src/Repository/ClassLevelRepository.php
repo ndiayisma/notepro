@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\ClassLevel;
+use App\Entity\Professor;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -19,6 +20,14 @@ class ClassLevelRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, ClassLevel::class);
+    }
+
+    public function findByProfessor(Professor $professor)
+    {
+        return $this->createQueryBuilder('c')
+            ->innerJoin('c.professors', 'p')
+            ->andWhere('p.id = :professor')
+            ->setParameter('professor', $professor);
     }
 
 //    /**
