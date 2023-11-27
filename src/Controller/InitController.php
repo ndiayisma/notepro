@@ -71,13 +71,13 @@ class InitController extends AbstractController
         $etudiant->setEmail('john.lenon@lycee-faure.fr');
         $etudiant->setClassLevel($class1);
         $etudiant->setRoles(['ROLE_STUDENT']);
-        $etudiant->setPassword($hasher->hashPassword($prof, 'etudiant'));
+        $etudiant->setPassword($hasher->hashPassword($etudiant, 'etudiant'));
         $etudiant2 = new Student();
         $etudiant2->setName('Paul Mc Cartney');
         $etudiant2->setEmail('paul.mccartney@lycee-faure.fr');
         $etudiant2->setClassLevel($class1);
         $etudiant2->setRoles(['ROLE_STUDENT']);
-        $etudiant2->setPassword($hasher->hashPassword($prof, 'etudiant'));
+        $etudiant2->setPassword($hasher->hashPassword($etudiant2, 'etudiant'));
 
         $eval = new Evaluation();
         $eval->setProfessor($prof);
