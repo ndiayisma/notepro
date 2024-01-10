@@ -28,6 +28,17 @@ class ProfessorType extends AbstractType
             ->add('name', TextType::class, [
                 'label' => 'Nom complet',
             ])
+            ->add('subjects', EntityType::class, [
+                'class' => Subject::class,
+                'label' => 'Matière',
+                'choice_label' => 'label',
+                'expanded' => true,
+                'multiple' => true,
+                'query_builder' => function(EntityRepository $er){
+                    return $er->createQueryBuilder('s')
+                        ->orderBy('s.label', 'ASC');
+                },
+            ])
         ;
     }
 
