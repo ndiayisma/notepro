@@ -3,6 +3,7 @@
 {% block title %}Mes évals{% endblock %}
 
 {% block body %}
+    <div class="container">
     <h1>Mes évals</h1>
 
     <ul>
@@ -11,4 +12,5 @@
         {% endfor %}
     </ul>
     <a href="{{ path('app_evaluation_new') }}">Créer une nouvelle évaluation</a>
+    </div>
 {% endblock %}

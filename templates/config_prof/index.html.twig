@@ -1,10 +1,12 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello ConfigProfController!{% endblock %}
+{% block title %}Config profs{% endblock %}
 
 {% block body %}
-    <h1>Configuration des professeurs</h1>
+    <div class="container">
+    <h1>Rattacher un prof à une classe</h1>
 
     {{ form(formProfs) }}
+    </div>
 
 {% endblock %}
