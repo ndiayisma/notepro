@@ -40,6 +40,9 @@ class Evaluation
     #[ORM\OneToMany(mappedBy: 'evaluation', targetEntity: Grade::class, orphanRemoval: true)]
     private Collection $grades;
 
+    #[ORM\Column(length: 255)]
+    private ?string $category = null;
+
     public function __construct()
     {
         $this->grades = new ArrayCollection();
@@ -160,5 +163,31 @@ class Evaluation
             }
         }
         return null;
+    }
+
+    public function getAvgGrade(): ?float
+    {
+        $total = 0;
+        $count = 0;
+        foreach ($this->bareme as $evaluation) {
+            $total += $evaluation->getBareme();
+            $count++;
+        }
+        if ($count === 0) {
+            return null;
+        }
+        return $total / $count;
+    }
+
+    public function getCategory(): ?string
+    {
+        return $this->category;
+    }
+
+    public function setCategory(string $category): static
+    {
+        $this->category = $category;
+
+        return $this;
     }
 }

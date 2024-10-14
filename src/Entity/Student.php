@@ -74,4 +74,17 @@ class Student extends User
         }
         return null;
     }
+
+    public function getAverageGrade(): float
+    {
+        $totalGrade = 0;
+        $totalEvaluations = 0;
+
+        foreach ($this->grades as $grade){
+            $totalGrade += $grade->getAvgGrades();
+            $totalEvaluations++;
+        }
+
+        return $totalEvaluations > 0 ? $totalGrade / $totalEvaluations : 0;
+    }
 }

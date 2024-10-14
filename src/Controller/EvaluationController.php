@@ -89,6 +89,7 @@ class EvaluationController extends AbstractController
     }
 
     #[Route('/{id}/notes', name: 'app_evaluation_set_grades', methods: ['GET', 'POST'])]
+    #[IsGranted('ROLE_PROFESSOR')]
     public function notes(Request $request, Evaluation $evaluation, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(SetGradeType::class,null,['students' => $evaluation->getClassLevel()->getStudents(), 'evaluation' => $evaluation]);

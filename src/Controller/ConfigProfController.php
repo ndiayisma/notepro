@@ -11,10 +11,12 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class ConfigProfController extends AbstractController
 {
     #[Route('/configprof/{id}', name: 'app_config_prof')]
+    #[IsGranted('ROLE_ADMIN')]
     public function index(Request $request, EntityManagerInterface $entityManager, Professor $professor): Response
     {
         $formProfs = $this->createForm(ConfigProfType::class, $professor);
@@ -31,6 +33,7 @@ class ConfigProfController extends AbstractController
     }
 
     #[Route('/configprof/', name: 'app_config_prof_subject')]
+    #[IsGranted('ROLE_ADMIN')]
     public function configProfSubject(Request $request, EntityManagerInterface $entityManager, ?Professor $professor): Response
     {
         $formProfs = $this->createForm(ConfigProfType::class, $professor);
